@@ -67,6 +67,19 @@ open class SGYJSONDeserializer {
     }
     
     /**
+     Attempts assigning properties to the provided `JSONKeyValueCreatable` instance using the provided JSON data.
+     
+     - parameter dictionary: JSON object.
+     - parameter instance: An object instance conforming to `JSONKeyValueCreatable`.
+    
+     - returns: An instance of the provided `JSONKeyValueCreatable` type with the associated key-value pairs assigned.
+     */
+    open func deserialize(_ dictionary: [String: Any], intoInstance instance: JSONKeyValueCreatable, observer: JSONWarningObserver? = nil) {
+        // Assign properties from dictionary and return
+        return assignInstanceProperties(instance, dictionary: dictionary, observer: observer)
+    }
+
+    /**
      Creates an instance of the provided `JSONCollectionCreatable` type and attempts assigning its elements using the provided JSON data.
      
      - parameter jsonData: JSON data.
@@ -101,18 +114,6 @@ open class SGYJSONDeserializer {
         return convertDictionary(dictionary, toDictionaryType: T.self, observer: observer) as! T
     }
     
-    /**
-     Creates an instance of the provided `JSONDictionaryCreatable` type and attempts assigning its key-value pairs using the provided JSON data.
-     
-     - parameter dictionary: JSON object.
-     
-     - returns: An instance of the provided `JSONDictionaryCreatable` type with the associated key-value pairs assigned.
-     */
-    open func deserialize<T: JSONDictionaryCreatable>(dictionary: [String: Any], observer: JSONWarningObserver? = nil) -> T {
-        // Result can only be a dictionary or an array, and we only expect a dictionary in this scenario
-        return convertDictionary(dictionary, toDictionaryType: T.self, observer: observer) as! T
-    }
-
     // MARK: Private
     
     private func deserializeData(_ data: Data) throws -> Any {
